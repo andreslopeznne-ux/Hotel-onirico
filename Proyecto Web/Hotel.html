@@ -1,0 +1,298 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hotel Onirico</title>
+  <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background: #f8f9fa; color: #222; }
+
+    /* Navbar */
+    .navbar { background: #000 !important; }
+
+    /* Banner */
+    .banner {
+      background: url('assets/img/banner-vista-mar.jpg') no-repeat center center/cover;
+      height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      color: #fff;
+    }
+    .banner .search-panel {
+      background: rgba(255,255,255,0.92);
+      color: #000;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 6px 20px rgba(0,0,0,.12);
+    }
+
+    /* imagenes y card uniformes */
+    .card { height: 100%; }
+    .img-fixed { width: 100%; height: 250px; object-fit: cover; display:block; }
+
+    /* Resaltado */
+    .resaltado {
+      border: 3px solid gold !important;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+      transition: all 0.3s ease;
+    }
+
+    /* Footer */
+    footer { background: #111; color: #fff; }
+
+    /* Small responsive tweak */
+    @media (max-width: 576px) {
+      .img-fixed { height: 180px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#inicio">Hotel Onirico</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navmenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#habitaciones">Habitaciones</a></li>
+          <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.html">Iniciar Sesión</a></li>
+          <li class="nav-item"><a class="nav-link" href="registro.html">Registrarse</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BANNER -->
+  <header id="inicio" class="banner">
+    <div class="container">
+      <div class="text-center text-white mb-3">
+        <h1 class="display-4">Bienvenido al Hotel Onirico</h1>
+        <p class="lead">Vive la experiencia de lujo y confort frente al mar</p>
+      </div>
+
+      <!-- cuadro con formulario de búsqueda -->
+      <div class="search-panel mx-auto">
+        <form id="searchForm" class="row g-3">
+          <div class="col-md-3">
+            <select id="destino" class="form-select">
+              <option selected disabled>Selecciona Habitación</option>
+              <option value="deluxe">Habitación Deluxe</option>
+              <option value="suite">Suite de Lujo</option>
+              <option value="standard">Habitación Standard</option>
+              <option value="romantica">Habitación Romántica</option>
+              <option value="vip">Habitación VIP</option>
+              <option value="ejecutiva">Habitación Ejecutiva</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <input id="checkin" type="date" class="form-control" placeholder="Check-in">
+          </div>
+          <div class="col-md-3">
+            <input id="checkout" type="date" class="form-control" placeholder="Check-out">
+          </div>
+          <div class="col-md-3">
+            <select id="huespedes" class="form-select">
+              <option selected disabled>Huéspedes</option>
+              <option>1</option><option>2</option><option>3</option><option>4+</option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <button type="button" id="btnBuscar" class="btn btn-primary w-100">Buscar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <!-- HABITACIONES -->
+  <section id="habitaciones" class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-4">Nuestras Habitaciones</h2>
+      <div class="row g-4">
+        <!-- Deluxe -->
+        <div class="col-md-4">
+          <div id="deluxe" class="card h-100">
+            <img src="assets/img/habitacion-deluxe.jpg" class="img-fixed card-img-top" alt="Deluxe">
+            <div class="card-body text-center">
+              <h5 class="card-title">Habitación Deluxe</h5>
+              <p class="card-text">Vista al mar, cama king y balcón.</p>
+              <p class="fw-bold text-primary">Precio: $350.000 / noche</p>
+              <button class="btn btn-primary w-100" onclick="reservar('Habitación Deluxe')">Reservar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Suite de Lujo -->
+        <div class="col-md-4">
+          <div id="suite" class="card h-100">
+            <img src="assets/img/suite-familiar.jpg" class="img-fixed card-img-top" alt="Suite">
+            <div class="card-body text-center">
+              <h5 class="card-title">Suite de Lujo</h5>
+              <p class="card-text">2 ambientes, kitchenette y sofá cama.</p>
+              <p class="fw-bold text-primary">Precio: $500.000 / noche</p>
+              <button class="btn btn-primary w-100" onclick="reservar('Suite de Lujo')">Reservar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Standard -->
+        <div class="col-md-4">
+          <div id="standard" class="card h-100">
+            <img src="assets/img/habitacion-standard.jpg" class="img-fixed card-img-top" alt="Standard">
+            <div class="card-body text-center">
+              <h5 class="card-title">Habitación Standard</h5>
+              <p class="card-text">Cómoda y práctica para estancias cortas.</p>
+              <p class="fw-bold text-primary">Precio: $150.000 / noche</p>
+              <button class="btn btn-primary w-100" onclick="reservar('Habitación Standard')">Reservar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Romántica -->
+        <div class="col-md-4">
+          <div id="romantica" class="card h-100">
+            <img src="assets/img/habitacion-romantica.jpg" class="img-fixed card-img-top" alt="Romántica">
+            <div class="card-body text-center">
+              <h5 class="card-title">Habitación Romántica</h5>
+              <p class="card-text">Decoración íntima y jacuzzi privado.</p>
+              <p class="fw-bold text-primary">Precio: $275.000 / noche</p>
+              <button class="btn btn-primary w-100" onclick="reservar('Habitación Romántica')">Reservar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIP -->
+        <div class="col-md-4">
+          <div id="vip" class="card h-100">
+            <img src="assets/img/habitacion-vip.jpg" class="img-fixed card-img-top" alt="VIP">
+            <div class="card-body text-center">
+              <h5 class="card-title">Habitación VIP</h5>
+              <p class="card-text">Atención premium y minibar.</p>
+              <p class="fw-bold text-primary">Precio: $600.000 / noche</p>
+              <button class="btn btn-primary w-100" onclick="reservar('Habitación VIP')">Reservar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ejecutiva -->
+        <div class="col-md-4">
+          <div id="ejecutiva" class="card h-100">
+            <img src="assets/img/habitacion-ejecutiva.jpg" class="img-fixed card-img-top" alt="Ejecutiva">
+            <div class="card-body text-center">
+              <h5 class="card-title">Habitación Ejecutiva</h5>
+              <p class="card-text">Espacio de trabajo y servicios de oficina.</p>
+              <p class="fw-bold text-primary">Precio: $350.000 / noche</p>
+              <button class="btn btn-primary w-100" onclick="reservar('Habitación Ejecutiva')">Reservar</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios" class="py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-4">Nuestros Servicios</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="assets/img/spa.jpg" class="img-fixed card-img-top" alt="Spa">
+            <div class="card-body text-center">
+              <h5 class="card-title">Spa</h5>
+              <p class="card-text">Relájate con masajes y tratamientos.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="assets/img/restaurante.jpg" class="img-fixed card-img-top" alt="Restaurante">
+            <div class="card-body text-center">
+              <h5 class="card-title">Restaurante</h5>
+              <p class="card-text">Gastronomía local e internacional.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="assets/img/piscina.jpg" class="img-fixed card-img-top" alt="Piscina">
+            <div class="card-body text-center">
+              <h5 class="card-title">Piscina</h5>
+              <p class="card-text">Piscina al aire libre con vista panorámica.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO / FOOTER -->
+  <footer id="contacto" class="py-4">
+    <div class="container text-center text-white">
+      <p>📞 <a href="tel:+573128422533" class="text-white">+57 312 842 2533</a> · hola@hotel-demo.com</p>
+      <p class="small">&copy; 2025 Hotel Onirico. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // abre WhatsApp
+    function reservar(habitacion) {
+      const telefono = "3128422533";
+      const mensaje = `Hola, me interesa reservar la ${habitacion}`;
+      const url = `https://wa.me/57${telefono}?text=${encodeURIComponent(mensaje)}`;
+      window.location.href = url;
+    }
+
+    // búsqueda con scroll y resalte
+    document.getElementById('btnBuscar').addEventListener('click', function () {
+      const destino = document.getElementById('destino').value;
+      if (destino) {
+        const habitacion = document.getElementById(destino);
+        if (habitacion) {
+          habitacion.scrollIntoView({ behavior: "smooth", block: "center" });
+          habitacion.classList.add("resaltado");
+          setTimeout(() => habitacion.classList.remove("resaltado"), 3000);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
