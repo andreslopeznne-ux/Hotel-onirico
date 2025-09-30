@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -9,13 +9,13 @@
     html { scroll-behavior: smooth; }
     body { background: #f8f9fa; color: #222; }
 
-    /* Navbar */
+
     .navbar { background: #000 !important; }
 
-    /* Banner */
+  
     .banner {
       background: url('assets/img/banner-vista-mar.jpg') no-repeat center center/cover;
-      height: 90vh;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -32,15 +32,29 @@
       box-shadow: 0 6px 20px rgba(0,0,0,.12);
     }
 
-    /* imagenes y card uniformes */
-    .card { height: 100%; }
-    .img-fixed { width: 100%; height: 250px; object-fit: cover; display:block; }
+    /* Uniform cards & images */
+    /*zoom*/
+    .card {
+      height: 100%;
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+      cursor: pointer;
+      overflow: hidden; 
+    }
+    .card:hover {
+      transform: scale(1.04);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    }
 
-    /* Resaltado */
-    .resaltado {
-      border: 3px solid gold !important;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-      transition: all 0.3s ease;
+    .img-fixed {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display:block;
+    
+      transition: filter 0.25s ease;
+    }
+    .card:hover .img-fixed {
+      filter: brightness(1.03);
     }
 
     /* Footer */
@@ -49,6 +63,21 @@
     /* Small responsive tweak */
     @media (max-width: 576px) {
       .img-fixed { height: 180px; }
+    }
+    .banner .search-panel p {
+      text-align: center;
+    }
+
+    /* Modal carousel caption small style */
+    .carousel-caption-custom {
+      position: absolute;
+      left: 1rem;
+      bottom: 1rem;
+      background: rgba(0,0,0,0.45);
+      color: #fff;
+      padding: .35rem .6rem;
+      border-radius: .4rem;
+      display: inline-block;
     }
   </style>
 </head>
@@ -81,39 +110,6 @@
         <h1 class="display-4">Bienvenido al Hotel Onirico</h1>
         <p class="lead">Vive la experiencia de lujo y confort frente al mar</p>
       </div>
-
-      <!-- cuadro con formulario de búsqueda -->
-      <div class="search-panel mx-auto">
-        <form id="searchForm" class="row g-3">
-          <div class="col-md-3">
-            <select id="destino" class="form-select">
-              <option selected disabled>Selecciona Habitación</option>
-              <option value="deluxe">Habitación Deluxe</option>
-              <option value="suite">Suite de Lujo</option>
-              <option value="standard">Habitación Standard</option>
-              <option value="romantica">Habitación Romántica</option>
-              <option value="vip">Habitación VIP</option>
-              <option value="ejecutiva">Habitación Ejecutiva</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <input id="checkin" type="date" class="form-control" placeholder="Check-in">
-          </div>
-          <div class="col-md-3">
-            <input id="checkout" type="date" class="form-control" placeholder="Check-out">
-          </div>
-          <div class="col-md-3">
-            <select id="huespedes" class="form-select">
-              <option selected disabled>Huéspedes</option>
-              <option>1</option><option>2</option><option>3</option><option>4+</option>
-            </select>
-          </div>
-
-          <div class="col-12">
-            <button type="button" id="btnBuscar" class="btn btn-primary w-100">Buscar</button>
-          </div>
-        </form>
-      </div>
     </div>
   </header>
 
@@ -124,82 +120,75 @@
       <div class="row g-4">
         <!-- Deluxe -->
         <div class="col-md-4">
-          <div id="deluxe" class="card h-100">
+          <div class="card h-100" data-bs-toggle="modal" data-bs-target="#galeriaDeluxe">
             <img src="assets/img/habitacion-deluxe.jpg" class="img-fixed card-img-top" alt="Deluxe">
             <div class="card-body text-center">
               <h5 class="card-title">Habitación Deluxe</h5>
               <p class="card-text">Vista al mar, cama king y balcón.</p>
-              <p class="fw-bold text-primary">Precio: $350.000 / noche</p>
-              <button class="btn btn-primary w-100" onclick="reservar('Habitación Deluxe')">Reservar</button>
+              <button class="btn btn-primary w-100" onclick="reservar('Habitación Deluxe'); event.stopPropagation();">⟶</button>
             </div>
           </div>
         </div>
 
         <!-- Suite de Lujo -->
         <div class="col-md-4">
-          <div id="suite" class="card h-100">
-            <img src="assets/img/suite-familiar.jpg" class="img-fixed card-img-top" alt="Suite">
+          <div class="card h-100" data-bs-toggle="modal" data-bs-target="#galeriaSuite">
+            <img src="assets/img/habitacion-suite-lujo.jpg" class="img-fixed card-img-top" alt="Suite de Lujo">
             <div class="card-body text-center">
               <h5 class="card-title">Suite de Lujo</h5>
               <p class="card-text">2 ambientes, kitchenette y sofá cama.</p>
-              <p class="fw-bold text-primary">Precio: $500.000 / noche</p>
-              <button class="btn btn-primary w-100" onclick="reservar('Suite de Lujo')">Reservar</button>
+              <button class="btn btn-primary w-100" onclick="reservar('Suite de Lujo'); event.stopPropagation();">⟶</button>
             </div>
           </div>
         </div>
 
-        <!-- Standard -->
+        <!-- Standard con galería -->
         <div class="col-md-4">
-          <div id="standard" class="card h-100">
+          <div class="card h-100" data-bs-toggle="modal" data-bs-target="#galeriaStandard">
             <img src="assets/img/habitacion-standard.jpg" class="img-fixed card-img-top" alt="Standard">
             <div class="card-body text-center">
               <h5 class="card-title">Habitación Standard</h5>
               <p class="card-text">Cómoda y práctica para estancias cortas.</p>
-              <p class="fw-bold text-primary">Precio: $150.000 / noche</p>
-              <button class="btn btn-primary w-100" onclick="reservar('Habitación Standard')">Reservar</button>
+              <button class="btn btn-primary w-100" onclick="reservar('Habitación Standard'); event.stopPropagation();">⟶</button>
             </div>
           </div>
         </div>
 
         <!-- Romántica -->
         <div class="col-md-4">
-          <div id="romantica" class="card h-100">
+          <div class="card h-100" data-bs-toggle="modal" data-bs-target="#galeriaRomantica">
             <img src="assets/img/habitacion-romantica.jpg" class="img-fixed card-img-top" alt="Romántica">
             <div class="card-body text-center">
               <h5 class="card-title">Habitación Romántica</h5>
               <p class="card-text">Decoración íntima y jacuzzi privado.</p>
-              <p class="fw-bold text-primary">Precio: $275.000 / noche</p>
-              <button class="btn btn-primary w-100" onclick="reservar('Habitación Romántica')">Reservar</button>
+              <button class="btn btn-primary w-100" onclick="reservar('Habitación Romántica'); event.stopPropagation();">⟶</button>
             </div>
           </div>
         </div>
 
         <!-- VIP -->
         <div class="col-md-4">
-          <div id="vip" class="card h-100">
+          <div class="card h-100" data-bs-toggle="modal" data-bs-target="#galeriaVip">
             <img src="assets/img/habitacion-vip.jpg" class="img-fixed card-img-top" alt="VIP">
             <div class="card-body text-center">
               <h5 class="card-title">Habitación VIP</h5>
               <p class="card-text">Atención premium y minibar.</p>
-              <p class="fw-bold text-primary">Precio: $600.000 / noche</p>
-              <button class="btn btn-primary w-100" onclick="reservar('Habitación VIP')">Reservar</button>
+              <button class="btn btn-primary w-100" onclick="reservar('Habitación VIP'); event.stopPropagation();">⟶</button>
             </div>
           </div>
         </div>
 
         <!-- Ejecutiva -->
         <div class="col-md-4">
-          <div id="ejecutiva" class="card h-100">
+          <div class="card h-100" data-bs-toggle="modal" data-bs-target="#galeriaEjecutiva">
             <img src="assets/img/habitacion-ejecutiva.jpg" class="img-fixed card-img-top" alt="Ejecutiva">
             <div class="card-body text-center">
               <h5 class="card-title">Habitación Ejecutiva</h5>
               <p class="card-text">Espacio de trabajo y servicios de oficina.</p>
-              <p class="fw-bold text-primary">Precio: $350.000 / noche</p>
-              <button class="btn btn-primary w-100" onclick="reservar('Habitación Ejecutiva')">Reservar</button>
+              <button class="btn btn-primary w-100" onclick="reservar('Habitación Ejecutiva'); event.stopPropagation();">⟶</button>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
@@ -249,30 +238,294 @@
   </footer>
 
   <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+   
+  <!-- MODAL DE DESCRIPCIÓN -->
+  <div class="modal fade" id="descripcionModal" tabindex="-1" aria-labelledby="descripcionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="descripcionModalLabel">Descripción</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p id="descripcionTexto"></p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-success" onclick="confirmarReserva()">Reservar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MODALES / CARRUSELES PARA CADA HABITACIÓN ===================== -->
+
+  <!-- MODAL GALERÍA HABITACIÓN STANDARD -->
+  <div class="modal fade" id="galeriaStandard" tabindex="-1" aria-labelledby="galeriaStandardLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="galeriaStandardLabel">Habitación Standard - Cuarto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+      
+          <div id="carouselStandard" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active" data-title="Habitación Standard - Cuarto">
+                <img src="assets/img/habitacion-standard.jpg" class="d-block w-100" alt="Cuarto">
+                <div class="carousel-caption-custom">Cuarto</div>
+              </div>
+              <div class="carousel-item" data-title="Habitación Standard - Baño">
+                <img src="assets/img/habitacion-standard-baño.jpg" class="d-block w-100" alt="Baño">
+                <div class="carousel-caption-custom">Baño</div>
+              </div>
+              <div class="carousel-item" data-title="Habitación Standard - Cocina">
+                <img src="assets/img/habitacion-standard-cocina.jpg" class="d-block w-100" alt="Cocina">
+                <div class="carousel-caption-custom">Cocina</div>
+              </div>
+            </div>
+            <!-- Controles -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselStandard" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselStandard" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL GALERÍA HABITACIÓN DELUXE -->
+  <div class="modal fade" id="galeriaDeluxe" tabindex="-1" aria-labelledby="galeriaDeluxeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="galeriaDeluxeLabel">Habitación Deluxe - Cuarto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="carouselDeluxe" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active" data-title="Habitación Deluxe - Cuarto">
+                <img src="assets/img/habitacion-deluxe.jpg" class="d-block w-100" alt="Deluxe Cuarto">
+                <div class="carousel-caption-custom">Cuarto</div>
+              </div>
+              <div class="carousel-item" data-title="Habitación Deluxe - Baño">
+                <img src="assets/img/habitacion-deluxe-baño.jpg" class="d-block w-100" alt="Deluxe Baño">
+                <div class="carousel-caption-custom">Baño</div>
+              </div>
+              <div class="carousel-item" data-title="Habitación Deluxe - Balcón">
+                <img src="assets/img/habitacion-deluxe-balcon.jpg" class="d-block w-100" alt="Deluxe Balcón">
+                <div class="carousel-caption-custom">Balcón</div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselDeluxe" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselDeluxe" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL GALERÍA SUITE DE LUJO -->
+  <div class="modal fade" id="galeriaSuite" tabindex="-1" aria-labelledby="galeriaSuiteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="galeriaSuiteLabel">Suite de Lujo - Sala</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="carouselSuite" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active" data-title="Suite de Lujo - Sala">
+                <img src="assets/img/habitacion-suite-lujo.jpg" class="d-block w-100" alt="Suite Sala">
+                <div class="carousel-caption-custom">Sala</div>
+              </div>
+              <div class="carousel-item" data-title="Suite de Lujo - Dormitorio">
+                <img src="assets/img/habitacion-suite-lujo-dormitorio.jpg" class="d-block w-100" alt="Suite Dormitorio">
+                <div class="carousel-caption-custom">Dormitorio</div>
+              </div>
+              <div class="carousel-item" data-title="Suite de Lujo - Cocina">
+                <img src="assets/img/habitacion-suite-lujo-cocina.jpg" class="d-block w-100" alt="Suite Cocina">
+                <div class="carousel-caption-custom">Cocina</div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselSuite" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselSuite" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL GALERÍA VIP -->
+  <div class="modal fade" id="galeriaVip" tabindex="-1" aria-labelledby="galeriaVipLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="galeriaVipLabel">Habitación VIP - Cuarto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="carouselVip" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active" data-title="Habitación VIP - Cuarto">
+                <img src="assets/img/habitacion-vip.jpg" class="d-block w-100" alt="VIP Cuarto">
+                <div class="carousel-caption-custom">Cuarto</div>
+              </div>
+              <div class="carousel-item" data-title="Habitación VIP - Minibar">
+                <img src="assets/img/habitacion-vip-minibar.jpg" class="d-block w-100" alt="VIP Minibar">
+                <div class="carousel-caption-custom">Minibar</div>
+              </div>
+              <div class="carousel-item" data-title="Habitación VIP - Sala">
+                <img src="assets/img/habitacion-vip-sala.jpg" class="d-block w-100" alt="VIP Sala">
+                <div class="carousel-caption-custom">Sala</div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselVip" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselVip" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL GALERÍA ROMÁNTICA -->
+  <div class="modal fade" id="galeriaRomantica" tabindex="-1" aria-labelledby="galeriaRomanticaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="galeriaRomanticaLabel">Habitación Romántica - Cuarto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="carouselRomantica" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active" data-title="Habitación Romántica - Cuarto">
+                <img src="assets/img/habitacion-romantica.jpg" class="d-block w-100" alt="Romántica Cuarto">
+                <div class="carousel-caption-custom">Cuarto</div>
+              </div>
+              <div class="carousel-item" data-title="Habitación Romántica - Jacuzzi">
+                <img src="assets/img/habitacion-romantica-jacuzzi.jpg" class="d-block w-100" alt="Romántica Jacuzzi">
+                <div class="carousel-caption-custom">Jacuzzi</div>
+              </div>
+              <div class="carousel-item" data-title="Habitación Romántica - Decoración">
+                <img src="assets/img/habitacion-romantica-decoracion.jpg" class="d-block w-100" alt="Romántica Decoración">
+                <div class="carousel-caption-custom">Decoración</div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselRomantica" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselRomantica" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL GALERÍA EJECUTIVA -->
+  <div class="modal fade" id="galeriaEjecutiva" tabindex="-1" aria-labelledby="galeriaEjecutivaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="galeriaEjecutivaLabel">Habitación Ejecutiva - Cuarto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="carouselEjecutiva" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active" data-title="Habitación Ejecutiva - Cuarto">
+                <img src="assets/img/habitacion-ejecutiva.jpg" class="d-block w-100" alt="Ejecutiva Cuarto">
+                <div class="carousel-caption-custom">Cuarto</div>
+              </div>
+              <div class="carousel-item" data-title="Habitación Ejecutiva - Oficina">
+                <img src="assets/img/habitacion-ejecutiva-oficina.jpg" class="d-block w-100" alt="Ejecutiva Oficina">
+                <div class="carousel-caption-custom">Oficina</div>
+              </div>
+              <div class="carousel-item" data-title="Habitación Ejecutiva - Sala">
+                <img src="assets/img/habitacion-ejecutiva-sala.jpg" class="d-block w-100" alt="Ejecutiva Sala">
+                <div class="carousel-caption-custom">Sala</div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselEjecutiva" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselEjecutiva" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCRIPTS ===================== -->
   <script>
-    // abre WhatsApp
+    const descripciones = {
+      "Habitación Deluxe": "Habitación amplia con cama king, balcón privado y vista al mar.",
+      "Suite de Lujo": "Suite de lujo con 2 ambientes, kitchenette y sofá cama para mayor confort.",
+      "Habitación Standard": "Cómoda y práctica para estancias cortas. Ideal para viajeros frecuentes.",
+      "Habitación Romántica": "Decoración íntima, iluminación tenue y jacuzzi privado para parejas.",
+      "Habitación VIP": "Exclusiva habitación VIP con minibar y atención premium.",
+      "Habitación Ejecutiva": "Espacio de trabajo incluido, servicios de oficina y alta velocidad en WiFi."
+    };
+
+    let habitacionSeleccionada = "";
+
     function reservar(habitacion) {
-      const telefono = "3128422533";
-      const mensaje = `Hola, me interesa reservar la ${habitacion}`;
-      const url = `https://wa.me/57${telefono}?text=${encodeURIComponent(mensaje)}`;
-      window.location.href = url;
+      habitacionSeleccionada = habitacion;
+      document.getElementById("descripcionModalLabel").innerText = habitacion;
+      document.getElementById("descripcionTexto").innerText = descripciones[habitacion];
+      let modal = new bootstrap.Modal(document.getElementById("descripcionModal"));
+      modal.show();
     }
 
-    // búsqueda con scroll y resalte
-    document.getElementById('btnBuscar').addEventListener('click', function () {
-      const destino = document.getElementById('destino').value;
-      if (destino) {
-        const habitacion = document.getElementById(destino);
-        if (habitacion) {
-          habitacion.scrollIntoView({ behavior: "smooth", block: "center" });
-          habitacion.classList.add("resaltado");
-          setTimeout(() => habitacion.classList.remove("resaltado"), 3000);
-        }
-      }
+    function confirmarReserva() {
+      window.location.href = "login.html";
+    }
+
+    function setupCarouselDynamicTitle(carouselId, modalTitleId) {
+      const carousel = document.getElementById(carouselId);
+      const modalTitle = document.getElementById(modalTitleId);
+      if (!carousel || !modalTitle) return;
+      carousel.addEventListener('slid.bs.carousel', function (event) {
+        const activeItem = event.relatedTarget;
+        const newTitle = activeItem ? activeItem.getAttribute('data-title') : null;
+        if (newTitle) modalTitle.textContent = newTitle;
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      setupCarouselDynamicTitle('carouselStandard', 'galeriaStandardLabel');
+      setupCarouselDynamicTitle('carouselDeluxe', 'galeriaDeluxeLabel');
+      setupCarouselDynamicTitle('carouselSuite', 'galeriaSuiteLabel');
+      setupCarouselDynamicTitle('carouselVip', 'galeriaVipLabel');
+      setupCarouselDynamicTitle('carouselRomantica', 'galeriaRomanticaLabel');
+      setupCarouselDynamicTitle('carouselEjecutiva', 'galeriaEjecutivaLabel');
     });
   </script>
+
 </body>
 </html>
+
+
 
 
 
